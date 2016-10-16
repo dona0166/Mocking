@@ -143,87 +143,111 @@ namespace Mocking
         {
             //implement your own logic
             //use mocks
+            //Arrange
+            const int id = 1;
+            const int hours = 42;
+
             
+            var mock = new Mock<IEmployeeRepository>();
+            mock.Setup(m => m.FindAllEmployees()).Returns(() => new List<Employee> { new Employee() { Id = 1, Name = "Hans", Type = "Teacher", Wage = 1000 }, new Employee() { Id = 2, Name = "Tove", Type = "Teacher", Wage = 750 }, new Employee() { Id = 3, Name = "Lene", Type = "Teacher", Wage = 500 } });
+            double expectedResult = (1000+750+500)/3;
+            double totalEmployeeSalary = 0.0;
+
+            //Act
+            List<Employee> alist = mock.Object.FindAllEmployees();
+            foreach(Employee anemployee in alist)
+            {
+                totalEmployeeSalary += anemployee.Wage;
+            }
+            double AverageWeeklySalery = totalEmployeeSalary / alist.Count;
+            
+
+            //Assert
+            Assert.AreEqual(expectedResult, AverageWeeklySalery);
+
+
         }
 
 
-        //        [TestMethod]
-        //        public void AfterMailSentNumMessagesCreatedHasBeenIncrementedByOne()
-        //        {
-        //            //Arrange
-        //            var admin = new User() { UserName = "sist@eal.dk", Password = "!QAZ2wsx", NumMessagesCreated = 0 };
-        //            var message = new Mail() { Content = "Hello Mom! Hope you are doing well" };
-        //            var mock = new Mock<IEmployeeRepository>();
-        //            mock.Setup(m => m.LoadEmployee(1)).Returns(() => new Employee() { Id = 1, Name = "Karen", Type = "Mom", Wage = 20 });
-        //            Employee e = mock.Object.LoadEmployee(1);
+        [TestMethod]
+        public void AfterMailSentNumMessagesCreatedHasBeenIncrementedByOne()
+        {
+            //Arrange
+            var admin = new User() { UserName = "sist@eal.dk", Password = "!QAZ2wsx", NumMessagesCreated = 0 };
+            var message = new Mail() { Content = "Hello Mom! Hope you are doing well" };
+            var mock = new Mock<IEmployeeRepository>();
+            mock.Setup(m => m.LoadEmployee(1)).Returns(() => new Employee() { Id = 1, Name = "Karen", Type = "Mom", Wage = 20 });
+            Employee e = mock.Object.LoadEmployee(1);
 
-        //            var mockMail = new Mock<IMailModule>();
-        //            mockMail.Setup(x => x.SendMail(message, e)).Callback(() => admin.NumMessagesCreated = 1);
+            var mockMail = new Mock<IMailModule>();
+            mockMail.Setup(x => x.SendMail(message, e)).Callback(() => admin.NumMessagesCreated = 1);
 
-        //            //Act
-        //            mockMail.Object.SendMail(message, e);
+            //Act
+            mockMail.Object.SendMail(message, e);
 
-        //            //Assert
-        //            Assert.AreEqual(1, admin.NumMessagesCreated);
-        //        }
+            //Assert
+            Assert.AreEqual(1, admin.NumMessagesCreated);
+        }
 
-        //        //[TestMethod]
-        //        //public void AfterLoginAdminCanEditEmployeeName()
-        //        //{
-        //        //    //Arrange
-        //        //    var admin = new User() { UserName = "sist@eal.dk", Password = "!QAZ2wsx" };
+        [TestMethod]
+        public void AfterLoginAdminCanEditEmployeeName()
+        {
+            //Arrange
+            var admin = new User() { UserName = "sist@eal.dk", Password = "!QAZ2wsx" };
 
-        //        //    var mockLogin = new Mock<ILoginModule>();
-        //        //    mockLogin.Setup(x => x.Login(admin))
-        //        //        .Callback(() => { admin.Rights = Rights.Full; });
+            var mockLogin = new Mock<ILoginModule>();
+            mockLogin.Setup(x => x.Login(admin))
+                .Callback(() => { admin.Rights = Rights.Full; });
 
-        //        //    var mock = new Mock<IEmployeeRepository>();
-        //        //    mock.Setup(m => m.LoadEmployee(1)).Returns(() => new Employee() { Id = 1, Name = "Peter", Type = "Slave", Wage = 20 });
-        //        //    Employee e = mock.Object.LoadEmployee(1);
+            var mock = new Mock<IEmployeeRepository>();
+            mock.Setup(m => m.LoadEmployee(1)).Returns(() => new Employee() { Id = 1, Name = "Peter", Type = "Slave", Wage = 20 });
+            Employee e = mock.Object.LoadEmployee(1);
 
-        //        //    //Act
-        //        //    mockLogin.Object.Login(admin);
-        //        //    admin.EditEmployeeName(e.Name, "Simon");
+            //Act
+            mockLogin.Object.Login(admin);
+            admin.EditEmployeeName(e, "Simon");
 
-        //        //    //Assert
-        //        //    Assert.AreEqual("Simon", e.Name);
-        //        //}
+            //Assert
+            Assert.AreEqual("Simon", e.Name);
+        }
 
-        //       // [TestMethod]
-        //        //public void AfterLoginAdminCanEditEmployeeWage()
-        //        //{
-        //        //    //Arrange
-        //        //    var admin = new User() { UserName = "sist@eal.dk", Password = "!QAZ2wsx" };
+        [TestMethod]
+        public void AfterLoginAdminCanEditEmployeeWage()
+        {
+            //Arrange
+            var admin = new User() { UserName = "sist@eal.dk", Password = "!QAZ2wsx" };
 
-        //        //    var mockLogin = new Mock<ILoginModule>();
-        //        //    mockLogin.Setup(x => x.Login(admin))
-        //        //        .Callback(() => { admin.Rights = Rights.Full; });
+            var mockLogin = new Mock<ILoginModule>();
+            mockLogin.Setup(x => x.Login(admin))
+                .Callback(() => { admin.Rights = Rights.Full; });
 
-        //        //    var mock = new Mock<IEmployeeRepository>();
-        //        //    mock.Setup(m => m.LoadEmployee(1)).Returns(() => new Employee() { Id = 1, Name = "Peter", Type = "Slave", Wage = 20 });
-        //        //    Employee e = mock.Object.LoadEmployee(1);
+            var mock = new Mock<IEmployeeRepository>();
+            mock.Setup(m => m.LoadEmployee(1)).Returns(() => new Employee() { Id = 1, Name = "Peter", Type = "Slave", Wage = 20 });
+            Employee e = mock.Object.LoadEmployee(1);
 
-        //        //    //Act
-        //        //    mockLogin.Object.Login(admin);
-        //        //    admin.EditEmployeeWage(e.Wage, 1000);
+            //Act
+            mockLogin.Object.Login(admin);
+            admin.EditEmployeeWage(e, 1000);
 
-        //        //    //Assert
-        //        //    Assert.AreEqual("Simon", e.Name);
-        //        //}
-        //        [TestMethod]
-        //        public void DoYourOwnLogic1()
-        //        {
-        //            //implement your idea and own logic
-        //            //use mocks
-        //            throw new NotImplementedException();
-        //        }
-        //        [TestMethod]
-        //        public void DoYourOwnLogic2()
-        //        {
-        //            //implement your idea and own logic
-        //            //use mocks
-        //            throw new NotImplementedException();
-        //        }
+            //Assert
+            Assert.AreEqual(1000, e.Wage);
+        }
+
+        [TestMethod]
+        public void DoYourOwnLogic1()
+        {
+            //implement your idea and own logic
+            //use mocks
+            
+        }
+
+        //[TestMethod]
+        //public void DoYourOwnLogic2()
+        //{
+        //    //implement your idea and own logic
+        //    //use mocks
+        //    throw new NotImplementedException();
+        //}
         //        [TestMethod]
         //        public void DoYourOwnLogic3()
         //        {

@@ -15,5 +15,7 @@ namespace Mocking
         Employee LoadEmployee(int id);
         List<Employee> FindAllEmployees();
 
+
+
     }
 }

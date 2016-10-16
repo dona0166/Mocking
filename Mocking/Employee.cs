@@ -19,12 +19,13 @@ namespace Mocking
         {
             this.Name = name;
             this.Type = job;
+            
         }
-        
+
         public override bool Equals(object ob)
         {
             Employee anemployee = ob as Employee;
-            if(anemployee != null && this.Name == anemployee.Name
+            if (anemployee != null && this.Name == anemployee.Name
                 && this.Type == anemployee.Type)
             {
                 return true;
@@ -33,8 +34,8 @@ namespace Mocking
             {
                 return false;
             }
-            
-            
+
+
         }
 
         public double CalculateWeeklySalary(int hours, int wage)
@@ -42,10 +43,6 @@ namespace Mocking
             return hours * wage;
         }
 
-        public string getname()
-        {
-            return this.Name;
-        }
 
         //public override string ToString()
         //{
